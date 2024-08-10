@@ -1,0 +1,2 @@
+// Операторы
+export const operators = ['+', '-', '*', '/'];
