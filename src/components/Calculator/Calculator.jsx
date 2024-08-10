@@ -13,6 +13,12 @@ const Calculator = () => {
   const [overwrite, setOverwrite] = useState(false);
 
   const handleClick = (value) => {
+    // Очистка значений перед началом нового вычисления
+    if (overwrite && !isOperator(value) && value !== 'AC' && value !== 'DEL') {
+      setInput(value);
+      setOverwrite(false);
+      return;
+    }
     switch (value) {
       case 'AC':
         setInput('');
