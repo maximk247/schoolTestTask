@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { evaluateExpression } from '../../helpers/evaluateExpression';
-import {
-  handleDecimal,
-  handleDigit,
-  handleOperator,
-} from '../../helpers/inputHandlers';
+import { handleDecimal, handleDigit } from '../../helpers/inputHandlers';
 import { isOperator } from '../../helpers/isOperator';
 import ButtonPanel from '../ButtonPanel';
 import Display from '../Display';
@@ -12,12 +8,16 @@ import './Calculator.css';
 
 const Calculator = () => {
   const [input, setInput] = useState('');
+  const [previousOperand, setPreviousOperand] = useState('');
+  const [currentOperator, setCurrentOperator] = useState('');
   const [overwrite, setOverwrite] = useState(false);
 
   const handleClick = (value) => {
     switch (value) {
       case 'AC':
         setInput('');
+        setPreviousOperand('');
+        setCurrentOperator('');
         setOverwrite(false);
         break;
       case 'DEL':
@@ -25,19 +25,33 @@ const Calculator = () => {
         setOverwrite(false);
         break;
       case '=':
-        try {
-          const result = evaluateExpression(input);
-          setInput(result.toString());
-          setOverwrite(true);
-        } catch {
-          setInput('Error');
+        if (previousOperand && currentOperator && input) {
+          try {
+            const expression = `${previousOperand}${currentOperator}${input}`;
+            const result = evaluateExpression(expression);
+            setInput(result.toString());
+            setPreviousOperand('');
+            setCurrentOperator('');
+            setOverwrite(true);
+          } catch {
+            setInput('Error');
+          }
         }
         break;
       default:
         if (value === '.') {
           setInput(handleDecimal(input));
         } else if (isOperator(value)) {
-          setInput(handleOperator(input, value, overwrite));
+          if (input) {
+            // Если есть текущий операнд, вычисляем результат предыдущего выражения
+            const expression = `${previousOperand}${currentOperator}${input}`;
+            const result = evaluateExpression(expression);
+            setPreviousOperand(result.toString());
+            setCurrentOperator(value);
+            setInput('');
+          } else if (previousOperand) {
+            setCurrentOperator(value);
+          }
           setOverwrite(false);
         } else {
           setInput(handleDigit(input, value));
@@ -48,7 +62,11 @@ const Calculator = () => {
 
   return (
     <div className="calculator">
-      <Display value={input} />
+      <Display
+        value={input}
+        previousOperand={previousOperand}
+        operator={currentOperator}
+      />
       <ButtonPanel handleClick={handleClick} />
     </div>
   );
