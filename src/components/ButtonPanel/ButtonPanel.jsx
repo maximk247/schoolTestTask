@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 import { buttons } from '../../consts/buttons';
 import Button from '../Button/Button';
 import './ButtonPanel.css';
 
-const ButtonPanel = ({ handleClick }) => {
+const ButtonPanel = memo(({ handleClick }) => {
   return (
     <div className="button-panel">
       {buttons.flat().map((btn, idx) => (
@@ -11,7 +12,9 @@ const ButtonPanel = ({ handleClick }) => {
       ))}
     </div>
   );
-};
+});
+
+ButtonPanel.displayName = 'ButtonPanel';
 
 ButtonPanel.propTypes = {
   handleClick: PropTypes.func.isRequired,
