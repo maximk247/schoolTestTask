@@ -5,20 +5,25 @@ import Display from './Display';
 
 const Calculator = () => {
   const [input, setInput] = useState('');
+  const [overwrite, setOverwrite] = useState(false); // Новое состояние для сброса ввода
 
   const evaluateExpression = (expression) => {
-    // Разбиваем строку на операнды и операторы
     const operators = [];
     const values = [];
     let currentNumber = '';
 
+    // Проходим по каждому символу выражения
     for (let char of expression) {
       if (!isNaN(char) || char === '.') {
         currentNumber += char;
       } else {
-        values.push(parseFloat(currentNumber));
-        operators.push(char);
-        currentNumber = '';
+        if (currentNumber === '' && char === '-') {
+          currentNumber = '-';
+        } else {
+          values.push(parseFloat(currentNumber));
+          operators.push(char);
+          currentNumber = '';
+        }
       }
     }
     values.push(parseFloat(currentNumber));
@@ -44,27 +49,67 @@ const Calculator = () => {
       }
     }
 
-    return result.toString();
+    return isNaN(result) ? 'Error' : result;
   };
 
   const handleClick = (value) => {
+    if (
+      overwrite &&
+      !['+', '-', '*', '/'].includes(value) &&
+      value !== 'AC' &&
+      value !== 'DEL'
+    ) {
+      if (value === '.') {
+        setInput('0.');
+      } else {
+        setInput(value);
+      }
+      setOverwrite(false);
+      return;
+    }
+
     switch (value) {
       case 'AC':
         setInput('');
+        setOverwrite(false);
         break;
       case 'DEL':
-        setInput(input.slice(0, -1));
+        if (overwrite) {
+          setInput('');
+          setOverwrite(false);
+        } else {
+          setInput(input.slice(0, -1));
+        }
         break;
       case '=':
         try {
           const result = evaluateExpression(input);
-          setInput(result);
+          setInput(result.toString());
+          setOverwrite(true);
         } catch {
           setInput('Error');
         }
         break;
       default:
-        setInput(input + value);
+        if (value === '.' && (input === '' || input.slice(-1) === ' ')) {
+          setInput('0.');
+        } else if (['+', '-', '*', '/'].includes(value)) {
+          if (overwrite) {
+            setInput(input + value);
+            setOverwrite(false);
+          } else if (input.slice(-1) === '.') {
+            setInput(input.slice(0, -1) + value);
+          } else if (
+            input === '' ||
+            ['+', '-', '*', '/'].includes(input.slice(-1))
+          ) {
+            setInput(input.slice(0, -1) + value);
+          } else {
+            setInput(input + value);
+          }
+        } else {
+          setInput(input + value);
+        }
         break;
     }
   };
