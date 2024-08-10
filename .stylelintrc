@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-prettier/recommended",
+    "stylelint-config-idiomatic-order"
+  ],
+  "ignoreFiles": ["dist/**", "**/*.json", "**/*.ico"],
+  "rules": {
+    "prettier/prettier": [
+      true,
+      {
+        "endOfLine": "auto"
+      }
+    ]
+  }
+}
