@@ -15,7 +15,7 @@ const Calculator = () => {
   const handleClick = (value) => {
     // Очистка значений перед началом нового вычисления
     if (overwrite && !isOperator(value) && value !== 'AC' && value !== 'DEL') {
-      setInput(value);
+      setInput(value === '.' ? '0.' : value);
       setOverwrite(false);
       return;
     }
