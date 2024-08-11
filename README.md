@@ -28,6 +28,6 @@
    ```bash
    npm run dev
    ```
-﻿# Деплой
+**Деплой**
 
 [Ссылка](https://maximk247.github.io/schoolTestTask/)
