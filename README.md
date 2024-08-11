@@ -1,8 +1,30 @@
-# React + Vite
+﻿# Запуск приложения
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. **Клонирование репозитория**
 
-Currently, two official plugins are available:
+   Склонируйте репозиторий на ваш локальный компьютер с помощью следующей команды:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+   ```bash
+   git clone https://github.com/maximk247/schoolTestTask.git
+   ```
+2. **Переход в директорию проекта**
+
+   Перейдите в директорию склонированного проекта:
+
+   ```bash
+   cd schoolTestTask
+   ```
+3. **Установка зависимостей**
+
+   Внутри директории проекта установите необходимые npm зависимости:
+
+   ```bash
+   npm install
+   ```
+4. **Запуск приложения**
+
+   Запустите приложение с помощью команды:
+
+   ```bash
+   npm run dev
+   ```
